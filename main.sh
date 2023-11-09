@@ -42,17 +42,17 @@ echo -ne "${BLU_BG}Test norminette:${END}\t"
 norm=$(norminette ../*.c ../*.h)
 if [[ $(echo "$norm" | egrep -v "OK\!$") ]] ;
 then
-	echo -e "${RED} norme errors:${END}"
+	echo -e "${RED}norme errors:${END}"
 	echo -e "$norm" | egrep -v "OK\!$"
 else
-	echo -e "${GREEN} norm ok${END}"
+	echo -e "${GREEN}norm ok${END}"
 fi
 
 #makefile relink
 echo -ne "${BLU_BG}Test Makefile:${END}\t\t"
 make re -C ../ 1>/dev/null 2> stderrmake.txt
 make -C ../ > stdoutmakebis.txt 2>&1
-[[ -s stderrmake.txt ]] && echo -ne "${RED} make wrote on std err${END}" || echo -ne "${GREEN} no make error${END}" 
+[[ -s stderrmake.txt ]] && echo -ne "${RED}make wrote on std err${END}" || echo -ne "${GREEN}no make error${END}" 
 echo -n " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relink?${END}" || echo -ne "${GREEN}no relink${END}"
 echo -n " -- "
@@ -64,7 +64,7 @@ if [[ $bool_bonus == 1 ]] ; then
 echo -ne "${BLU_BG}Test Makefile bonus:${END}\t"
 make fclean -C ../ &>/dev/null && make ${rule_bonus} -C ../ 1>/dev/null 2> stderrmake.txt
 make ${rule_bonus} -C ../ > stdoutmakebis.txt 2>&1
-[[ -s stderrmake.txt ]] && echo -ne "${RED} make ${rule_bonus} wrote on std err${END}" || echo -ne "${GREEN} no make ${rule_bonus} error${END}" 
+[[ -s stderrmake.txt ]] && echo -ne "${RED}make ${rule_bonus} wrote on std err${END}" || echo -ne "${GREEN}no make ${rule_bonus} error${END}" 
 echo -ne " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relinks on bonus?${END}" || echo -ne "${GREEN}no relink on bonus${END}"
 echo -ne " -- "
@@ -97,7 +97,7 @@ echo ../*.c ../*.h | grep -sq global && echo -e "${RED}global variable???${END}"
 echo -e "${GREEN}OK${END}"
 
 # -----------------------------------------------------------------------------------------------------------------------------------------
-# is_ functions (libc)
+# is_ functions (vs libc)
 # -----------------------------------------------------------------------------------------------------------------------------------------
 echo -e "${YEL_BG}Is_functions tests${END}"
 
@@ -105,3 +105,18 @@ $cc $cflags filestest/is_functions.c $ldflags
 ./a.out && rm a.out
 
 
+# -----------------------------------------------------------------------------------------------------------------------------------------
+# atoi (vs libc)
+# -----------------------------------------------------------------------------------------------------------------------------------------
+echo -e "${YEL_BG}atoi tests${END}"
+
+$cc $cflags filestest/atoi.c $ldflags
+./a.out && rm a.out
+
+:' tests to do
+	"0"
+	"-2147483648"
+	"2147483647"
+	"2147483648"
+	"12345p678"
+'

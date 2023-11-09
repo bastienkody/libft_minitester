@@ -56,7 +56,7 @@ make -C ../ > stdoutmakebis.txt 2>&1
 echo -n " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relink?${END}" || echo -ne "${GREEN}no relink${END}"
 echo -n " -- "
-[[ -f libft.a ]] && echo -e "${GREEN}libft.a found${END}" || { echo -e "${RED}no libft.a found. Tester exiting.${END}" && exit 1 ; }
+[[ -f ../libft.a ]] && echo -e "${GREEN}libft.a found${END}" || { echo -e "${RED}no libft.a found. Tester exiting.${END}" && exit 1 ; }
 rm -rf stderrmake.txt stdoutmakebis.txt
 
 #relink bonus
@@ -68,7 +68,7 @@ make ${rule_bonus} -C ../ > stdoutmakebis.txt 2>&1
 echo -ne " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relinks on bonus?${END}" || echo -ne "${GREEN}no relink on bonus${END}"
 echo -ne " -- "
-[[ -f $lib_bonus ]] && echo -e "${GREEN}$lib_bonus${END}" || echo -e "${RED}$lib_bonus not found${END}"
+[[ -f ../$lib_bonus ]] && echo -e "${GREEN}$lib_bonus${END}" || echo -e "${RED}$lib_bonus not found${END}"
 rm -rf stderrmake.txt stdoutmakebis.txt
 ( make fclean -C ../ && make -C ../ ) >/dev/null 2>&1
 fi

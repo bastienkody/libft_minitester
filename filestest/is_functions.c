@@ -3,14 +3,7 @@
 #include "filestest.h"
 #include "../../libft.h"
 
-/*	is_function libft/libc test	*/
-/*	3 tests per function, this order : 
-	alpha
-	alnum
-	ascii
-	digit
-	print
-*/
+/*	is_function libft/libc tests	*/
 
 void	check_diff(char *fct, int arg, int libc, int libft)
 {

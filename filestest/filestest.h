@@ -1,7 +1,6 @@
 #ifndef FILETEST_H
 # define FILETEST_H
 
-/*	colors	*/
 # define ITA "\033[3m"
 # define UNDERL "\033[4m"
 # define GREEN "\033[32m"
@@ -12,9 +11,6 @@
 # define YEL_BG "\033[43;1m"
 # define RED_BG "\033[41;1m"
 
-/*	other	*/
-# define LINE_SEP "------------------------------------------------------------\
---------------------"
-
+# define LINE_SEP "------------------------------------"
 
 #endif

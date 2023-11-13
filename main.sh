@@ -13,7 +13,7 @@ rule_bonus="bonus"
 # compil infos
 cc=gcc
 cflags="-Wall -Wextra -Werror"
-ldflags="../libft.a"
+ldflags="../libft.a -static"
 
 # const
 vlgleak='/usr/bin/valgrind --leak-check=full'
@@ -36,13 +36,35 @@ echo -e "by $USER on $(uname) os"
 echo -e "made by bguillau (@bastienkody)"
 echo "------------------------------------"
 echo "------------------------------------"
-[[ $(uname) != "linux" ]] && echo -e "${ITA}Possibly uncompatible os ($(uname))${END}"
+[[ $(uname) != "Linux" ]] && echo -e "${ITA}Possibly uncompatible os ($(uname))${END}"
 
 # ------------------------------------------------------------------------------
 # 				----- NORM, MAKEFILE and FORBIDDEN STUFF -----
 # ------------------------------------------------------------------------------
 if [[ $bool_compliance == 1 ]] ; then 
 echo -e "${YEL_BG}CCOMPLIANCE${END}"
+
+#------------------------------
+# check all expected files :
+echo -ne "${BLU_BG}Expected files${END}\t\t"
+
+basename -a $(ls -l ../*.c ../*.h ../Makefile | awk '{print $NF}' ) > tmp_expected_files.txt
+
+if [[ $( diff tmp_expected_files.txt filestest/expected_files.txt &>/dev/null ; echo $? ) == 0 ]] ; then
+	echo -e "${GREEN}Found all${END}"
+	rm tmp_expected_files.txt
+else
+	echo ""
+	while read -r line
+	do	if [[ ! $(grep $line filestest/expected_files.txt) ]] ; then
+		echo -e "${RED}Unexpected $line${END}" ; fi ;
+	done < tmp_expected_files.txt
+
+	while read -r line
+	do	if [[ ! $(grep $line tmp_expected_files.txt) ]] ; then
+		echo -e "${RED}Missing $line${END}" ; fi ;
+	done < filestest/expected_files.txt
+fi
 
 #----------
 # norminette
@@ -195,7 +217,7 @@ $cc $cflags filestest/str2.c $ldflags -lbsd
 # str p3: join, trim, sub, split
 echo -e "${BLU_BG}Str part 3${END}"
 
-$cc $cflags filestest/str3.c $ldflags -lbsd
+$cc $cflags filestest/str3.c $ldflags
 ./a.out && rm a.out
 
 #--------------------------------
@@ -244,22 +266,24 @@ exit 0
 fi
 
 echo '
-# Few tips for new studs : 
+## Few tips for new studs ##
 
-# Makefile	:	not to relink -> rule == name of exec (bonus is fucked up)
-# Makefile	:	add header in dependances of name rule
-# Makefile	:	@ not to print current line ; use echo "\033[m" for format/color
-# Makefile	:	make -C <path> to call specific Makefile (printf, gnl etc)
-# Makefile	:	@make --no-print-directory -C -> no print when making elsewhere
-# Libft		:	atoi overflow functions (int:pushswap, long long:minishell(builtin exit), unsigned char:cub3d(rgb parsing))
-# Libft		:	ft_fprintf (solong, pushswap, minishell etc)
-# No sudo	:	mkdir ~/.bin -> put your custom exec
-# No sudo	:	in .bashrc = $PATH+=":~/.bin"
-# Stack		:	VLA vs malloc
-# Norm		:	several instructions in a return with "," and use of  typecast
-# Norm		:	silent unused with : int main(__attribute__((unused) int argc)
-# Norm		:	iter with i=-1; while(++i) to start at idx 0 and save 1-2lines
-# Logique du free intermediaire (ie. split)
-# LEARNING BASH IS ALL YOU NEED'
-
-echo "------------------------------------"
+Makefile	:	not to relink -> rule == name of exec (bonus is fucked up)
+Makefile	:	add header in dependances of name rule
+Makefile	:	@ not to print current line ; use echo "\033[m" for format/color
+Makefile	:	make -C <path> to call specific Makefile (printf, gnl etc)
+Makefile	:	@make --no-print-directory -C -> no print when making elsewhere
+Libft		:	atoi overflow (int:pushswap, long long:exitminishell, uchar:cub3drgb)
+Libft		:	ft_fprintf (solong, pushswap, minishell etc)
+No sudo		:	mkdir ~/.bin -> put your custom exec
+No sudo		:	in .bashrc = $PATH+=":~/.bin"
+Stack		:	VLA vs malloc
+Norm		:	several instructions in a return with "," and use of  typecast
+Norm		:	silent unused with : int main(__attribute__((unused) int argc)
+Norm		:	iter with i=-1; while(++i) to start at idx 0 and save 1-2lines
+Leaks		: 	compile with -g3 (more info ie. line number) 
+Leaks		:	set alias valgrind : 
+			- alias vlgleak="vlg --leak-check=full"
+			- alias vlg="/usr/bin/valgrind" (for unset PATH tests)
+			- alias vlgfd="vlg--track-fds=yes --trace-children=yes" (pipex)
+------------------------------------'

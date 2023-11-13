@@ -16,7 +16,6 @@ cflags="-Wall -Wextra -Werror"
 ldflags="../libft.a -static"
 
 # const
-vlgleak='/usr/bin/valgrind --leak-check=full'
 ITA="\033[3m"
 UNDERL="\033[4m"
 GREEN="\033[32m"
@@ -36,7 +35,7 @@ echo -e "by $USER on $(uname) os"
 echo -e "made by bguillau (@bastienkody)"
 echo "------------------------------------"
 echo "------------------------------------"
-[[ $(uname) != "Linux" ]] && echo -e "${ITA}Possibly uncompatible os ($(uname))${END}"
+echo -e "${ITA}No leak tests${END}"
 
 # ------------------------------------------------------------------------------
 # 				----- NORM, MAKEFILE and FORBIDDEN STUFF -----
@@ -59,7 +58,6 @@ else
 	do	if [[ ! $(grep $line filestest/expected_files.txt) ]] ; then
 		echo -e "${RED}Unexpected $line${END}" ; fi ;
 	done < tmp_expected_files.txt
-
 	while read -r line
 	do	if [[ ! $(grep $line tmp_expected_files.txt) ]] ; then
 		echo -e "${RED}Missing $line${END}" ; fi ;
@@ -130,9 +128,7 @@ grep -sq -- "-std=c99" ../Makefile && echo -e "${RED}-std=99 flag forbidden${END
 echo ../*.c ../*.h | grep -sq global && echo -e "${RED}global variable???${END}" && exit 2
 echo -e "${GREEN}OK${END}"
 
-else
-make -C ../ >/dev/null 
-fi
+else make -C ../ >/dev/null ; fi
 
 # ------------------------------------------------------------------------------
 # 					------- MANDATORY FUNCTIONS TESTS -------
@@ -142,7 +138,6 @@ echo -e "${YEL_BG}MANDATORY FUNCTION TESTS${END}"
 #-----------------------------
 # putchar/str functions 
 echo -ne "${BLU_BG}Put_chastr functions${END}\t"
-
 $cc $cflags filestest/put_chastr.c $ldflags
 ./a.out > ft_out 2> ft_err && rm a.out
 echo -n aAyoubidoubidouyouhouuuu > std_out && echo immakinminimalwagemama >> std_out
@@ -151,14 +146,11 @@ echo "uUskudara gideriken" > std_err && echo aldidabiryamur >> std_err
 if [[ $(diff std_out ft_out &>/dev/null ; echo $?) == 0 ]] && [[ $(diff std_err ft_err &>/dev/null ; echo $?) == 0 ]] ; then
 	echo -e "${GREEN}OK${END}" 
 	rm std_out std_err ft_out ft_err 
-else 
-	echo -e "${RED}KO, check logfile (libft : ft_out/err vs expected : std_out/err)${END}"
-fi
+else echo -e "${RED}KO, check logfile (libft : ft_out/err vs expected : std_out/err)${END}" ; fi
 
 #-----------------------------
 # putnbr 
 echo -ne "${BLU_BG}Put_nbr${END}\t\t\t"
-
 $cc $cflags filestest/put_nbr.c $ldflags
 ./a.out > ft_outnb 2> ft_errnb && rm a.out
 echo "2147483647" > std_outnb && echo "-2147483648" >> std_outnb
@@ -167,63 +159,53 @@ echo 0 > std_errnb && echo -1 >> std_errnb && echo 12345678 >> std_errnb
 if [[ $(diff std_outnb ft_outnb &>/dev/null ; echo $?) == 0 ]] && [[ $(diff std_errnb ft_errnb &>/dev/null ; echo $?) == 0 ]] ; then
 	echo -e "${GREEN}OK${END}" 
 	rm std_outnb ft_outnb std_errnb ft_errnb
-else 
-	echo -e "${RED}KO, check logfile (libft : ft_outnb/errnb vs expected : std_outnb/errnb)${END}"
-fi
+else echo -e "${RED}KO, check logfile (libft : ft_outnb/errnb vs expected : std_outnb/errnb)${END}" ; fi
 
 #-----------------------------
 # one char functions (vs libc)
 echo -e "${BLU_BG}One char functions${END}"
-
 $cc $cflags filestest/one_char_functions.c $ldflags
 ./a.out && rm a.out
 
 #---------------
 # atoi (vs libc)
 echo -e "${BLU_BG}Atoi${END}"
-
 $cc $cflags filestest/atoi.c $ldflags
 ./a.out && rm a.out
 
 #---------------
 # itoa
 echo -e "${BLU_BG}Itoa${END}"
-
 $cc $cflags filestest/itoa.c $ldflags
 ./a.out && rm a.out
 
 #--------------------------------
 # mem :  (vs libc)
 echo -e "${BLU_BG}Mem functions${END}"
-
 $cc $cflags filestest/mem.c $ldflags
 ./a.out && rm a.out
 
 #-------------------------------------------
 # str p1: len, chr, rchr, ncmp, nstr (vs libc)
 echo -e "${BLU_BG}Str libc part 1${END}"
-
 $cc $cflags filestest/str1.c $ldflags -lbsd
 ./a.out && rm a.out
 
 #--------------------------------
 # str p2: dup, lcat, lcpy (vs libc)
 echo -e "${BLU_BG}Str libc part 2${END}"
-
 $cc $cflags filestest/str2.c $ldflags -lbsd
 ./a.out && rm a.out
 
 #--------------------------------
 # str p3: join, trim, sub, split
 echo -e "${BLU_BG}Str part 3${END}"
-
 $cc $cflags filestest/str3.c $ldflags
 ./a.out && rm a.out
 
 #--------------------------------
 # str p4: ptr sur fct
 echo -e "${BLU_BG}Str part 4 (ptr sur fct)${END}"
-
 $cc $cflags filestest/str4.c $ldflags
 ./a.out && rm a.out
 
@@ -237,7 +219,6 @@ echo -e "${YEL_BG}BONUS FUNCTION TESTS${END}"
 #--------------------------------
 # bonus : all in one
 echo -ne "${BLU_BG}One test for all${END}"
-
 $cc $cflags filestest/bonus_all_in_one.c $ldflags
 ./a.out > libft_bonus && rm a.out
 
@@ -261,29 +242,25 @@ fi
 # 					------- OUTRO -------
 # ------------------------------------------------------------------------------
 make fclean -C ../ &>/dev/null
-if [[ $bool_bonus == 0 ]] ; then 
-exit 0
-fi
+if [[ $bool_bonus == 0 ]] ; then exit 0 ; fi
 
-echo '
-## Few tips for new studs ##
-
-Makefile	:	not to relink -> rule == name of exec (bonus is fucked up)
-Makefile	:	add header in dependances of name rule
-Makefile	:	@ not to print current line ; use echo "\033[m" for format/color
-Makefile	:	make -C <path> to call specific Makefile (printf, gnl etc)
-Makefile	:	@make --no-print-directory -C -> no print when making elsewhere
-Libft		:	atoi overflow (int:pushswap, long long:exitminishell, uchar:cub3drgb)
-Libft		:	ft_fprintf (solong, pushswap, minishell etc)
-No sudo		:	mkdir ~/.bin -> put your custom exec
-No sudo		:	in .bashrc = $PATH+=":~/.bin"
-Stack		:	VLA vs malloc
-Norm		:	several instructions in a return with "," and use of  typecast
-Norm		:	silent unused with : int main(__attribute__((unused) int argc)
-Norm		:	iter with i=-1; while(++i) to start at idx 0 and save 1-2lines
-Leaks		: 	compile with -g3 (more info ie. line number) 
-Leaks		:	set alias valgrind : 
-			- alias vlgleak="vlg --leak-check=full"
-			- alias vlg="/usr/bin/valgrind" (for unset PATH tests)
-			- alias vlgfd="vlg--track-fds=yes --trace-children=yes" (pipex)
-------------------------------------'
+echo -e "\n${YEL_BG}Some tips for new studs${END}"
+echo 'Makefil	:	not to relink -> rule == name of exec (bonus is fucked up)
+Makefil	:	add header in dependances of name rule
+Makefil	:	@ not to print current line ; use echo "\033[m" for format/color
+Makefil	:	make -C <path> to call specific Makefile (printf, gnl etc)
+Makefil	:	@make --no-print-directory -C -> no print when making elsewhere
+Libft	:	atoi overflow (int:pushswap, long long:exitminishell, uchar:cub3drgb)
+Libft	:	ft_fprintf (solong, pushswap, minishell etc)
+No sudo	:	mkdir ~/.bin -> put your custom exec
+No sudo	:	in .bashrc = $PATH+=":~/.bin"
+Stack	:	VLA vs malloc
+Norm	:	several instructions in a return with "," and use of typecast
+Norm	:	silent unused with : int main(__attribute__((unused) int argc)
+Norm	:	iter with i=-1; while(++i) to start at idx 0 and save 1-2lines
+Leaks	:	compile with -g3 (more info ie. line number) 
+Leaks	:	set alias valgrind : 
+		- alias vlgleak="vlg --leak-check=full"
+		- alias vlg="/usr/bin/valgrind" (for unset PATH tests)
+		- alias vlgfd="vlg--track-fds=yes --trace-children=yes" (pipex)
+--------------------------------------------------------------------------------'

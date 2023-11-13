@@ -131,8 +131,8 @@ int	main(void)
 	check_diff_cpymv("memv", "efgh", "abcd", 0, memmove(dst_c, src_c, 0), ft_memmove(dst_ft, src_ft, 0), dst_c, dst_ft);
 	check_diff_cpymv("memv", "efgh", "abcd", 2, memmove(dst_c, src_c, 2), ft_memmove(dst_ft, src_ft, 2), dst_c, dst_ft);
 	free_n_dup_value(&src_c, &src_ft, &dst_c, &dst_ft, "src_dst");
-	check_diff_cpymv("memv", "efgh", "abcd", 98, memmove(dst_c, src_c, 98), ft_memmove(dst_ft, src_ft, 98), dst_c, dst_ft);
 	//printf("dstc:%s\ndstft:%s\n", dst_c, dst_ft);
+	check_diff_cpymv("memv", "efgh", "abcd", 5, memmove(dst_c, src_c, 5), ft_memmove(dst_ft, src_ft, 5), dst_c, dst_ft);
 	free_n_dup_value(&src_c, &src_ft, &dst_c, &dst_ft, "src_dst");
 	check_diff_cpymv("memv overlap", "_dst", "src_dst", 3, memmove(src_c + 3, src_c, 3), ft_memmove(src_ft + 3, src_ft, 3), src_c +3, src_ft + 3);
 	check_diff_cpymv("memv overlap", "src_dst", "_dst", 3, memmove(dst_c, dst_c + 3, 3), ft_memmove(dst_ft, dst_ft + 3, 3), dst_c, dst_ft);

@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
+#include <bsd/string.h>
 #include "filestest.h"
 #include "../../libft.h"
 

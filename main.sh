@@ -6,6 +6,7 @@
 #turn bool_ to 0 to skip specific tests
 bool_compliance=1
 bool_bonus=1
+bool_print_tips=1
 lib_bonus="libft.a"
 rule_bonus="bonus"
 
@@ -59,7 +60,7 @@ fi
 # makefile relink
 echo -ne "${BLU_BG}Test Makefile${END}\t\t"
 make re -C ../ 1>/dev/null 2> stderrmake.txt
-make -C ../ > stdoutmakebis.txt 2>&1
+make --no-print-directory -C ../ > stdoutmakebis.txt 2>&1
 [[ -s stderrmake.txt ]] && echo -ne "${RED}make wrote on std err${END}" || echo -ne "${GREEN}no make error${END}" 
 echo -n " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relink?${END}" || echo -ne "${GREEN}no relink${END}"
@@ -72,7 +73,7 @@ rm -rf stderrmake.txt stdoutmakebis.txt
 if [[ $bool_bonus == 1 ]] ; then
 echo -ne "${BLU_BG}Test Makefile bonus${END}\t"
 make fclean -C ../ &>/dev/null && make ${rule_bonus} -C ../ 1>/dev/null 2> stderrmake.txt
-make ${rule_bonus} -C ../ > stdoutmakebis.txt 2>&1
+make ${rule_bonus} --no-print-directory -C ../ > stdoutmakebis.txt 2>&1
 [[ -s stderrmake.txt ]] && echo -ne "${RED}make ${rule_bonus} wrote on std err${END}" || echo -ne "${GREEN}no make ${rule_bonus} error${END}" 
 echo -ne " -- "
 cat stdoutmakebis.txt | egrep -viq "(nothin|already|date)" && echo -ne "${RED}makefile relinks on bonus?${END}" || echo -ne "${GREEN}no relink on bonus${END}"
@@ -180,21 +181,21 @@ $cc $cflags filestest/mem.c $ldflags
 # str p1: len, chr, rchr, ncmp, nstr (vs libc)
 echo -e "${BLU_BG}Str libc part 1${END}"
 
-$cc $cflags filestest/str1.c $ldflags
+$cc $cflags filestest/str1.c $ldflags -lbsd
 ./a.out && rm a.out
 
 #--------------------------------
 # str p2: dup, lcat, lcpy (vs libc)
 echo -e "${BLU_BG}Str libc part 2${END}"
 
-$cc $cflags filestest/str2.c $ldflags
+$cc $cflags filestest/str2.c $ldflags -lbsd
 ./a.out && rm a.out
 
 #--------------------------------
 # str p3: join, trim, sub, split
 echo -e "${BLU_BG}Str part 3${END}"
 
-$cc $cflags filestest/str3.c $ldflags
+$cc $cflags filestest/str3.c $ldflags -lbsd
 ./a.out && rm a.out
 
 #--------------------------------
@@ -238,6 +239,9 @@ fi
 # 					------- OUTRO -------
 # ------------------------------------------------------------------------------
 make fclean -C ../ &>/dev/null
+if [[ $bool_bonus == 0 ]] ; then 
+exit 0
+fi
 
 echo '
 # Few tips for new studs : 

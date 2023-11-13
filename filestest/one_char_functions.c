@@ -8,10 +8,10 @@
 void	check_diff(char *fct, int arg, int libc, int libft)
 {
 	printf("%s(%i)\t:\t", fct, arg);
-	if (libc != libft)
-		printf("%sKO : libc ret%i -- libft ret%i\n%s", RED, libc, libft, END);
-	else
+	if (libc == libft || (libc != 0 && libft != 0))
 		printf("%sOK\n%s", GREEN, END);
+	else
+		printf("%sKO : libc ret%i -- libft ret%i\n%s", RED, libc, libft, END);
 }
 
 int	main(void)
